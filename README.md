@@ -1,7 +1,7 @@
+<!DOCTYPE html>
 <body class="card">
    <header id="Newton">
-       <img src=https://hips.hearstapps.com/hmg-prod/images/isaac_newton_1689_painting_sir_godfrey_kneller_public_domain_via_wikimedia_commons.jpg
-     class="profile">
+       <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpgalt="Isaac Newton" class="profile">
        <div class="text">
        <h1>Isaac Newton</h1>
        <p>Physicist & Mathematician</p>
