@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <body class="card">
    <header id="Newton">
-       <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpgalt="Isaac Newton" class="profile">
+       <img src=https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg class="profile">
        <div class="text">
        <h1>Isaac Newton</h1>
        <p>Physicist & Mathematician</p>
