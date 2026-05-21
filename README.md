@@ -1,6 +1,6 @@
 <body class="card">
    <header id="Newton">
-       <img src=https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg
+       <img src=https://hips.hearstapps.com/hmg-prod/images/isaac_newton_1689_painting_sir_godfrey_kneller_public_domain_via_wikimedia_commons.jpg
      class="profile">
        <div class="text">
        <h1>Isaac Newton</h1>
