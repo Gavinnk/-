@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <body class="card">
    <header id="Newton">
        <img src=https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg
