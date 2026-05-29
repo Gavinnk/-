@@ -6,8 +6,6 @@
        <h1>Isaac Newton</h1>
        <p>Physicist & Mathematician</p>
        <a href="#contact" class="btn">Hire Me</a>
-    <button onclick="toggleBg()" class="btn">Dark Mode</button>
-    <button onclick="animateSkills()" class="btn">Animate Skills</button>
        </div>
   </header>
 <section id="about">
@@ -110,25 +108,17 @@
       <p>Email: newton@physics.com</p>
     </div>
   </footer>
-  <script>
-function toggleBg(){
-  document.body.classList.toggle("dark");
-}
-function animateSkills(){
-  const bars = document.querySelectorAll(".fill");
-
-  bars.forEach(bar => {
+<script>
+document.addEventListener("click", () => {
+  document.querySelectorAll(".fill").forEach(bar => {
     const target = bar.dataset.width;
-    bar.style.width = target;
-  });
-}
-window.onload = function(){
-  const bars = document.querySelectorAll(".fill");
-
-  bars.forEach(bar => {
     bar.style.width = "0";
+
+    setTimeout(() => {
+      bar.style.width = target;
+    }, 100);
   });
-};
+});
 </script>
 </body>
 <style>
@@ -298,9 +288,5 @@ body{
 #achievements{
   padding-bottom:20px;
   border-bottom:1px solid #ddd;
-}
-.dark{
-  background:#111;
-  color:white;
 }
 </style>
