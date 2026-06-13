@@ -31,7 +31,8 @@ body {
   color: var(--text);
   padding: 40px 20px;
   min-height: 100vh;
-  overflow-x: hidden; /* 只允许垂直滚动 */
+  overflow-x: hidden;
+  cursor: none; /* 隐藏默认光标 */
 }
 
 /* ========== 粒子背景 ========== */
@@ -68,7 +69,7 @@ body {
   background: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  overflow: visible; /* 关键修复：改为 visible 而不是 hidden */
+  overflow: visible;
   backdrop-filter: blur(10px);
   animation: cardAppear 1.5s ease-out forwards;
   opacity: 0;
@@ -92,7 +93,7 @@ body {
   color: white;
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius) var(--radius) 0 0; /* 添加圆角 */
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 #Newton::before {
@@ -122,7 +123,7 @@ body {
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
   animation: profilePulse 3s infinite alternate;
   transition: all 0.5s ease;
-  cursor: pointer;
+  cursor: none;
 }
 
 .profile:hover {
@@ -171,6 +172,7 @@ body {
   position: relative;
   overflow: hidden;
   animation: btnFloat 3s infinite ease-in-out;
+  cursor: none;
 }
 
 .btn:hover {
@@ -231,6 +233,7 @@ section.visible {
   color: var(--primary);
   position: relative;
   display: inline-block;
+  cursor: none;
 }
 
 .about-text h2::after,
@@ -256,6 +259,7 @@ section.visible h2::after {
   color: var(--text-light);
   font-size: 17px;
   animation: fadeIn 1.5s ease-out;
+  cursor: none;
 }
 
 .about-info {
@@ -265,6 +269,7 @@ section.visible h2::after {
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   transition: all 0.5s ease;
+  cursor: none;
 }
 
 .about-info:hover {
@@ -280,6 +285,7 @@ section.visible h2::after {
   border-bottom: 1px dashed rgba(0,0,0,0.1);
   font-size: 15px;
   transition: all 0.3s ease;
+  cursor: none;
 }
 
 .about-info p:hover {
@@ -309,6 +315,7 @@ section.visible h2::after {
 .skill {
   animation: fadeInUp 1s ease-out;
   animation-fill-mode: both;
+  cursor: none;
 }
 
 .skill:nth-child(1) { animation-delay: 0.1s; }
@@ -379,11 +386,11 @@ section.visible h2::after {
   overflow: hidden;
   animation: fadeInLeft 1s ease-out;
   animation-fill-mode: both;
+  cursor: none;
 }
 
 .exp-item:nth-child(2) { animation-delay: 0.2s; }
 .exp-item:nth-child(3) { animation-delay: 0.4s; }
-}
 
 .exp-item::before {
   content: '';
@@ -475,6 +482,7 @@ section.visible h2::after {
   overflow: hidden;
   animation: fadeInUp 1s ease-out;
   animation-fill-mode: both;
+  cursor: none;
 }
 
 .achievement:nth-child(1) { animation-delay: 0.1s; }
@@ -538,7 +546,7 @@ footer {
   color: white;
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 var(--radius) var(--radius); /* 添加底部圆角 */
+  border-radius: 0 0 var(--radius) var(--radius);
 }
 
 footer::before {
@@ -611,10 +619,10 @@ footer::before {
   50% { transform: scale(1.05); }
 }
 
-/* ========== 活动状态 ========== */
-.active {
+/* ========== 悬停放大效果 ========== */
+.exp-item:hover,
+.achievement:hover {
   transform: scale(1.05) !important;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.25) !important;
   z-index: 10;
   position: relative;
 }
@@ -652,11 +660,13 @@ footer::before {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(34, 207, 155, 0.5);
+  background: rgba(34, 207, 155, 0.8);
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: screen;
   transition: transform 0.1s ease;
+  transform: translate(-50%, -50%); /* 居中对齐 */
+  box-shadow: 0 0 15px rgba(34, 207, 155, 0.8);
 }
 
 .cursor-trail {
@@ -664,9 +674,10 @@ footer::before {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(34, 207, 155, 0.3);
+  background: rgba(34, 207, 155, 0.4);
   pointer-events: none;
   z-index: 9998;
+  transform: translate(-50%, -50%); /* 居中对齐 */
 }
 </style>
 </head>
@@ -840,20 +851,21 @@ function animateSkillBars() {
   });
 }
 
-// 自定义光标效果
+// 自定义光标效果 - 修复对齐问题
 function initCursorEffect() {
   const cursor = document.getElementById('cursor');
   const trails = [];
   
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    // 使用 pageX/pageY 确保考虑滚动偏移
+    cursor.style.left = e.pageX + 'px';
+    cursor.style.top = e.pageY + 'px';
     
     // 创建轨迹
     const trail = document.createElement('div');
     trail.className = 'cursor-trail';
-    trail.style.left = e.clientX + 'px';
-    trail.style.top = e.clientY + 'px';
+    trail.style.left = e.pageX + 'px';
+    trail.style.top = e.pageY + 'px';
     document.body.appendChild(trail);
     
     trails.push(trail);
@@ -867,7 +879,7 @@ function initCursorEffect() {
     // 轨迹淡出
     setTimeout(() => {
       trail.style.opacity = '0';
-      trail.style.transform = 'scale(0.5)';
+      trail.style.transform = 'translate(-50%, -50%) scale(0.5)';
       setTimeout(() => {
         if (trail.parentNode) {
           trail.remove();
@@ -878,19 +890,20 @@ function initCursorEffect() {
   
   // 点击效果
   document.addEventListener('click', (e) => {
-    cursor.style.transform = 'scale(2)';
+    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
     setTimeout(() => {
-      cursor.style.transform = 'scale(1)';
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
     }, 200);
   });
 }
 
-// 图片点击效果
-document.getElementById('profile-img').addEventListener('click', function() {
-  this.style.transform = 'rotate(360deg) scale(1.2)';
-  setTimeout(() => {
-    this.style.transform = 'rotate(0deg) scale(1)';
-  }, 1000);
+// 图片悬停效果（替代点击）
+document.getElementById('profile-img').addEventListener('mouseenter', function() {
+  this.style.transform = 'rotate(5deg) scale(1.1)';
+});
+
+document.getElementById('profile-img').addEventListener('mouseleave', function() {
+  this.style.transform = 'rotate(0deg) scale(1)';
 });
 
 // 初始化所有功能
@@ -901,22 +914,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 初始显示第一个section
   document.querySelector('#about').classList.add('visible');
-});
-
-// 原有的点击切换active类
-document.querySelectorAll(".exp-item, .achievement").forEach(card => {
-  card.addEventListener("click", () => {
-    document.querySelectorAll(".active").forEach(el => {
-      el.classList.remove("active");
-    });
-    card.classList.add("active");
-    
-    // 添加点击动画
-    card.style.animation = 'none';
-    setTimeout(() => {
-      card.style.animation = 'pulse 0.5s ease';
-    }, 10);
-  });
 });
 
 // 按钮点击波纹效果
