@@ -654,7 +654,7 @@ footer::before {
   }
 }
 
-/* ========== 自定义光标效果 ========== */
+/* ========== 自定义光标效果 - 修复对齐 ========== */
 .cursor-effect {
   position: fixed;
   width: 20px;
@@ -664,9 +664,11 @@ footer::before {
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: screen;
-  transition: transform 0.1s ease;
-  transform: translate(-50%, -50%); /* 居中对齐 */
+  /* 关键修复：使用负边距实现精确居中 */
+  margin-left: -10px;
+  margin-top: -10px;
   box-shadow: 0 0 15px rgba(34, 207, 155, 0.8);
+  transition: transform 0.1s ease;
 }
 
 .cursor-trail {
@@ -677,7 +679,9 @@ footer::before {
   background: rgba(34, 207, 155, 0.4);
   pointer-events: none;
   z-index: 9998;
-  transform: translate(-50%, -50%); /* 居中对齐 */
+  /* 关键修复：使用负边距实现精确居中 */
+  margin-left: -4px;
+  margin-top: -4px;
 }
 </style>
 </head>
@@ -857,15 +861,15 @@ function initCursorEffect() {
   const trails = [];
   
   document.addEventListener('mousemove', (e) => {
-    // 使用 pageX/pageY 确保考虑滚动偏移
-    cursor.style.left = e.pageX + 'px';
-    cursor.style.top = e.pageY + 'px';
+    // 使用 clientX/clientY 并设置光标位置
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
     
     // 创建轨迹
     const trail = document.createElement('div');
     trail.className = 'cursor-trail';
-    trail.style.left = e.pageX + 'px';
-    trail.style.top = e.pageY + 'px';
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
     document.body.appendChild(trail);
     
     trails.push(trail);
@@ -879,7 +883,7 @@ function initCursorEffect() {
     // 轨迹淡出
     setTimeout(() => {
       trail.style.opacity = '0';
-      trail.style.transform = 'translate(-50%, -50%) scale(0.5)';
+      trail.style.transform = 'scale(0.5)';
       setTimeout(() => {
         if (trail.parentNode) {
           trail.remove();
@@ -890,9 +894,9 @@ function initCursorEffect() {
   
   // 点击效果
   document.addEventListener('click', (e) => {
-    cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+    cursor.style.transform = 'scale(2)';
     setTimeout(() => {
-      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      cursor.style.transform = 'scale(1)';
     }, 200);
   });
 }
