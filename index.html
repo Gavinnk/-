@@ -32,7 +32,8 @@ body {
   padding: 40px 20px;
   min-height: 100vh;
   overflow-x: hidden;
-  cursor: none; /* 隐藏默认光标 */
+  /* 恢复默认光标 */
+  cursor: default;
 }
 
 /* ========== 粒子背景 ========== */
@@ -123,7 +124,6 @@ body {
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
   animation: profilePulse 3s infinite alternate;
   transition: all 0.5s ease;
-  cursor: none;
 }
 
 .profile:hover {
@@ -172,7 +172,6 @@ body {
   position: relative;
   overflow: hidden;
   animation: btnFloat 3s infinite ease-in-out;
-  cursor: none;
 }
 
 .btn:hover {
@@ -233,7 +232,6 @@ section.visible {
   color: var(--primary);
   position: relative;
   display: inline-block;
-  cursor: none;
 }
 
 .about-text h2::after,
@@ -259,7 +257,6 @@ section.visible h2::after {
   color: var(--text-light);
   font-size: 17px;
   animation: fadeIn 1.5s ease-out;
-  cursor: none;
 }
 
 .about-info {
@@ -269,7 +266,6 @@ section.visible h2::after {
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   transition: all 0.5s ease;
-  cursor: none;
 }
 
 .about-info:hover {
@@ -285,7 +281,6 @@ section.visible h2::after {
   border-bottom: 1px dashed rgba(0,0,0,0.1);
   font-size: 15px;
   transition: all 0.3s ease;
-  cursor: none;
 }
 
 .about-info p:hover {
@@ -315,7 +310,6 @@ section.visible h2::after {
 .skill {
   animation: fadeInUp 1s ease-out;
   animation-fill-mode: both;
-  cursor: none;
 }
 
 .skill:nth-child(1) { animation-delay: 0.1s; }
@@ -386,7 +380,6 @@ section.visible h2::after {
   overflow: hidden;
   animation: fadeInLeft 1s ease-out;
   animation-fill-mode: both;
-  cursor: none;
 }
 
 .exp-item:nth-child(2) { animation-delay: 0.2s; }
@@ -482,7 +475,6 @@ section.visible h2::after {
   overflow: hidden;
   animation: fadeInUp 1s ease-out;
   animation-fill-mode: both;
-  cursor: none;
 }
 
 .achievement:nth-child(1) { animation-delay: 0.1s; }
@@ -653,45 +645,12 @@ footer::before {
     padding: 30px 20px;
   }
 }
-
-/* ========== 自定义光标效果 - 修复对齐 ========== */
-.cursor-effect {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(34, 207, 155, 0.8);
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: screen;
-  /* 关键修复：使用负边距实现精确居中 */
-  margin-left: -10px;
-  margin-top: -10px;
-  box-shadow: 0 0 15px rgba(34, 207, 155, 0.8);
-  transition: transform 0.1s ease;
-}
-
-.cursor-trail {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(34, 207, 155, 0.4);
-  pointer-events: none;
-  z-index: 9998;
-  /* 关键修复：使用负边距实现精确居中 */
-  margin-left: -4px;
-  margin-top: -4px;
-}
 </style>
 </head>
 
 <body class="card">
 <!-- 粒子背景 -->
 <div class="particles" id="particles"></div>
-
-<!-- 自定义光标效果 -->
-<div class="cursor-effect" id="cursor"></div>
 
 <header id="Newton">
   <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg" class="profile" id="profile-img">
@@ -855,53 +814,7 @@ function animateSkillBars() {
   });
 }
 
-// 自定义光标效果 - 修复对齐问题
-function initCursorEffect() {
-  const cursor = document.getElementById('cursor');
-  const trails = [];
-  
-  document.addEventListener('mousemove', (e) => {
-    // 使用 clientX/clientY 并设置光标位置
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    
-    // 创建轨迹
-    const trail = document.createElement('div');
-    trail.className = 'cursor-trail';
-    trail.style.left = e.clientX + 'px';
-    trail.style.top = e.clientY + 'px';
-    document.body.appendChild(trail);
-    
-    trails.push(trail);
-    
-    // 移除旧的轨迹
-    if (trails.length > 10) {
-      const oldTrail = trails.shift();
-      oldTrail.remove();
-    }
-    
-    // 轨迹淡出
-    setTimeout(() => {
-      trail.style.opacity = '0';
-      trail.style.transform = 'scale(0.5)';
-      setTimeout(() => {
-        if (trail.parentNode) {
-          trail.remove();
-        }
-      }, 300);
-    }, 100);
-  });
-  
-  // 点击效果
-  document.addEventListener('click', (e) => {
-    cursor.style.transform = 'scale(2)';
-    setTimeout(() => {
-      cursor.style.transform = 'scale(1)';
-    }, 200);
-  });
-}
-
-// 图片悬停效果（替代点击）
+// 图片悬停效果
 document.getElementById('profile-img').addEventListener('mouseenter', function() {
   this.style.transform = 'rotate(5deg) scale(1.1)';
 });
@@ -914,7 +827,6 @@ document.getElementById('profile-img').addEventListener('mouseleave', function()
 document.addEventListener('DOMContentLoaded', function() {
   createParticles();
   handleScrollAnimations();
-  initCursorEffect();
   
   // 初始显示第一个section
   document.querySelector('#about').classList.add('visible');
