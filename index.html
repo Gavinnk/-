@@ -3,261 +3,683 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Isaac Newton — Profile</title>
+<title>Isaac Newton — Animated Profile</title>
 <style>
-/* ========== 全局变量 ========== */
+/* ========== 全局变量与基础样式 ========== */
 :root {
   --primary: #1769aa;
   --accent: #22cf9b;
-  --bg: #f5f7fa;
-  --card: #ffffff;
-  --text: #333333;
-  --text-light: #666666;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(0,0,0,0.08);
+  --bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --text: #333;
+  --text-light: #666;
+  --radius: 20px;
+  --glow: 0 0 20px rgba(34, 207, 155, 0.7);
+  --super-glow: 0 0 40px rgba(34, 207, 155, 0.9);
 }
 
-/* ========== 基础样式 ========== */
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+* {
   margin: 0;
-  padding: 40px 20px;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  padding: 40px 20px;
+  min-height: 100vh;
+  overflow-x: hidden; /* 只允许垂直滚动 */
+}
+
+/* ========== 粒子背景 ========== */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: float 15s infinite linear;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ========== 主卡片 ========== */
 .card {
-  max-width: 860px;
+  max-width: 900px;
   margin: auto;
-  background: var(--card);
+  background: var(--card-bg);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  overflow: visible; /* 关键修复：改为 visible 而不是 hidden */
+  backdrop-filter: blur(10px);
+  animation: cardAppear 1.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========== Header ========== */
 #Newton {
-  background: linear-gradient(135deg, var(--primary), #2183d4);
+  background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
   display: flex;
   align-items: center;
   gap: 40px;
-  padding: 40px;
-  color: #fff;
+  padding: 50px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0; /* 添加圆角 */
+}
+
+#Newton::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: moveGrid 20s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes moveGrid {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-30px, -30px) rotate(360deg); }
 }
 
 .profile {
-  width: 180px;
-  height: 180px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid rgba(255,255,255,0.6);
+  border: 5px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  animation: profilePulse 3s infinite alternate;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.profile:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes profilePulse {
+  0% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.5); }
+  100% { box-shadow: 0 0 50px rgba(255, 255, 255, 0.8), 0 0 70px rgba(34, 207, 155, 0.6); }
 }
 
 .text h1 {
   margin: 0;
-  font-size: 32px;
-  letter-spacing: 0.5px;
+  font-size: 42px;
+  letter-spacing: 2px;
+  text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: titleGlow 2s infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% { text-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+  100% { text-shadow: 0 5px 25px rgba(34, 207, 155, 0.5); }
 }
 
 .text p {
-  margin: 8px 0 20px;
+  margin: 10px 0 25px;
+  font-size: 18px;
   opacity: 0.9;
-  font-size: 16px;
+  animation: fadeInUp 1s ease-out 0.5s both;
 }
 
 .btn {
   display: inline-block;
-  padding: 10px 22px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 8px;
+  padding: 15px 35px;
+  background: linear-gradient(45deg, var(--accent), #1dd1a1);
+  color: white;
+  border-radius: 50px;
   text-decoration: none;
-  font-size: 14px;
-  transition: 0.3s;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 20px rgba(34, 207, 155, 0.4);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  animation: btnFloat 3s infinite ease-in-out;
 }
 
 .btn:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: var(--super-glow);
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: 0.5s;
+}
+
+.btn:hover::after {
+  left: 100%;
+}
+
+@keyframes btnFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ========== 内容区域通用动画 ========== */
+section {
+  padding: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s ease;
+}
+
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ========== About ========== */
 #about {
-  padding: 40px;
+  position: relative;
 }
 
 .about-content {
   display: flex;
   gap: 50px;
+  position: relative;
 }
 
 .about-text h2,
 #skills h2,
 #experience h2,
 #achievements h2 {
-  margin: 0 0 15px;
-  font-size: 24px;
+  margin: 0 0 20px;
+  font-size: 28px;
   color: var(--primary);
+  position: relative;
+  display: inline-block;
+}
+
+.about-text h2::after,
+#skills h2::after,
+#experience h2::after,
+#achievements h2::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), #1dd1a1);
+  transition: width 1s ease;
+}
+
+section.visible h2::after {
+  width: 100%;
 }
 
 .about-text p {
-  line-height: 1.7;
+  line-height: 1.8;
   color: var(--text-light);
+  font-size: 17px;
+  animation: fadeIn 1.5s ease-out;
 }
 
 .about-info {
-  min-width: 220px;
+  min-width: 250px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.5s ease;
+}
+
+.about-info:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
 .about-info p {
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
-  font-size: 14px;
+  margin: 15px 0;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.1);
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.about-info p:hover {
+  background: rgba(34, 207, 155, 0.1);
+  padding-left: 10px;
+  border-radius: 5px;
 }
 
 .about-info span {
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 700;
+  color: var(--primary);
 }
 
 /* ========== Skills ========== */
 #skills {
-  padding: 0 40px 40px;
+  background: rgba(247, 250, 252, 0.8);
+  border-radius: 20px;
+  margin: 20px 40px;
 }
 
 .skills-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 25px 50px;
+  gap: 30px 50px;
+}
+
+.skill {
+  animation: fadeInUp 1s ease-out;
+  animation-fill-mode: both;
+}
+
+.skill:nth-child(1) { animation-delay: 0.1s; }
+.skill:nth-child(2) { animation-delay: 0.2s; }
+.skill:nth-child(3) { animation-delay: 0.3s; }
+.skill:nth-child(4) { animation-delay: 0.4s; }
+.skill:nth-child(5) { animation-delay: 0.5s; }
+.skill:nth-child(6) { animation-delay: 0.6s; }
 }
 
 .skill p {
-  margin: 0 0 8px;
-  font-size: 15px;
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
 }
 
 .bar {
-  height: 10px;
-  background: #e9ecef;
+  height: 12px;
+  background: rgba(0,0,0,0.1);
   border-radius: 10px;
   overflow: hidden;
+  position: relative;
 }
 
 .fill {
   height: 100%;
   border-radius: 10px;
-  background: var(--primary);
-  transition: width 1s ease;
+  background: linear-gradient(90deg, var(--primary), #4a90e2);
+  position: relative;
+  transition: width 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
+}
+
+.fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.4), 
+    transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 /* ========== Experience ========== */
 #experience {
-  padding: 0 40px 40px;
+  position: relative;
 }
 
 .exp-item {
-  background: #fff;
+  background: white;
   border-left: 5px solid var(--primary);
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  transition: 0.3s;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInLeft 1s ease-out;
+  animation-fill-mode: both;
+}
+
+.exp-item:nth-child(2) { animation-delay: 0.2s; }
+.exp-item:nth-child(3) { animation-delay: 0.4s; }
+}
+
+.exp-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(34, 207, 155, 0.1), transparent);
+  transition: 0.5s;
+}
+
+.exp-item:hover::before {
+  left: 100%;
 }
 
 .exp-item:hover {
-  transform: translateY(-3px);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  border-left-color: var(--accent);
 }
 
 .exp-item h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
+  color: var(--primary);
+  transition: color 0.3s ease;
+}
+
+.exp-item:hover h3 {
+  color: var(--accent);
 }
 
 .place {
-  font-size: 14px;
+  font-size: 15px;
   color: #777;
-  margin: 6px 0 12px;
+  margin: 8px 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.place::before {
+  content: '📍';
+  margin-right: 8px;
 }
 
 .exp-item ul {
   padding-left: 20px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-light);
+}
+
+.exp-item li {
+  margin-bottom: 8px;
+  padding-left: 10px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.exp-item li:hover {
+  color: var(--primary);
+  padding-left: 20px;
+}
+
+.exp-item li::marker {
+  color: var(--accent);
 }
 
 /* ========== Achievements ========== */
 #achievements {
-  padding: 0 40px 40px;
+  background: rgba(247, 250, 252, 0.8);
+  border-radius: 20px;
+  margin: 20px 40px;
 }
 
 .achieve-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 25px;
 }
 
 .achievement {
-  padding: 22px;
-  border-radius: 14px;
-  color: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-  transition: 0.3s;
+  padding: 25px;
+  border-radius: 15px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-out;
+  animation-fill-mode: both;
+}
+
+.achievement:nth-child(1) { animation-delay: 0.1s; }
+.achievement:nth-child(2) { animation-delay: 0.2s; }
+.achievement:nth-child(3) { animation-delay: 0.3s; }
+.achievement:nth-child(4) { animation-delay: 0.4s; }
+}
+
+.achievement::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: moveGrid 30s linear infinite;
+  opacity: 0.3;
+}
+
+.achievement:hover {
+  transform: translateY(-15px) scale(1.05);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
 }
 
 .achievement h3 {
-  margin: 0 0 10px;
-  font-size: 18px;
+  margin: 0 0 15px;
+  font-size: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .achievement p {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
+  position: relative;
+  z-index: 1;
+  opacity: 0.9;
 }
 
-.laws { background: #3b82f6; }
-.gravity { background: #10b981; }
-.Mcalculus { background: #8b5cf6; }
-.Moptics { background: #f59e0b; }
+.laws { 
+  background: linear-gradient(135deg, #667eea, #764ba2); 
+}
+.gravity { 
+  background: linear-gradient(135deg, #11998e, #38ef7d); 
+}
+.Mcalculus { 
+  background: linear-gradient(135deg, #8b5cf6, #ec4899); 
+}
+.Moptics { 
+  background: linear-gradient(135deg, #f59e0b, #ef4444); 
+}
 
 /* ========== Footer ========== */
 footer {
-  background: #f0f4f8;
-  padding: 30px 40px;
+  background: linear-gradient(135deg, #0c2461, #1e3799);
+  padding: 40px;
   text-align: center;
-  font-size: 14px;
-  color: var(--text-light);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius) var(--radius); /* 添加底部圆角 */
 }
 
-/* ========== Active Card Effect ========== */
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--accent), #1dd1a1, var(--accent));
+  animation: rainbow 3s linear infinite;
+}
+
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+#contact h2 {
+  margin: 0 0 20px;
+  font-size: 28px;
+  animation: pulse 2s infinite;
+}
+
+#contact p {
+  font-size: 18px;
+  opacity: 0.9;
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+#contact p:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}
+
+/* ========== 动画关键帧 ========== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ========== 活动状态 ========== */
 .active {
-  transform: scale(1.03);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  transform: scale(1.05) !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25) !important;
+  z-index: 10;
+  position: relative;
 }
 
-/* ========== Responsive ========== */
+/* ========== 响应式设计 ========== */
 @media (max-width: 768px) {
   .about-content {
     flex-direction: column;
   }
+  
   .skills-container,
   .achieve-grid {
     grid-template-columns: 1fr;
   }
+  
   #Newton {
     flex-direction: column;
     text-align: center;
+    padding: 30px 20px;
   }
+  
+  .profile {
+    width: 150px;
+    height: 150px;
+  }
+  
+  section {
+    padding: 30px 20px;
+  }
+}
+
+/* ========== 自定义光标效果 ========== */
+.cursor-effect {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(34, 207, 155, 0.5);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: screen;
+  transition: transform 0.1s ease;
+}
+
+.cursor-trail {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(34, 207, 155, 0.3);
+  pointer-events: none;
+  z-index: 9998;
 }
 </style>
 </head>
 
 <body class="card">
+<!-- 粒子背景 -->
+<div class="particles" id="particles"></div>
+
+<!-- 自定义光标效果 -->
+<div class="cursor-effect" id="cursor"></div>
 
 <header id="Newton">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg" class="profile">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg" class="profile" id="profile-img">
   <div class="text">
     <h1>Isaac Newton</h1>
     <p>Physicist & Mathematician</p>
@@ -269,11 +691,7 @@ footer {
   <div class="about-content">
     <div class="about-text">
       <h2>About Me</h2>
-      <p>
-        Hello! I’m Isaac Newton. I am passionate about mathematics, physics, and the natural laws of the universe.
-        I am a skilled mathematician and theoretical physicist, and I have contributed to the development of calculus,
-        optics, and classical mechanics.
-      </p>
+      <p>Hello! I’m Isaac Newton. I am passionate about mathematics, physics, and the natural laws of the universe. I am a skilled mathematician and theoretical physicist, and I have contributed to the development of calculus, optics, and classical mechanics.</p>
     </div>
     <div class="about-info">
       <p><span>Age</span> 84</p>
@@ -287,12 +705,30 @@ footer {
 <section id="skills">
   <h2>Professional Skills</h2>
   <div class="skills-container">
-    <div class="skill"><p>Mathematics</p><div class="bar"><div class="fill math" style="width:95%"></div></div></div>
-    <div class="skill"><p>Physics (Classical Mechanics)</p><div class="bar"><div class="fill physics" style="width:92%"></div></div></div>
-    <div class="skill"><p>Calculus</p><div class="bar"><div class="fill calculus" style="width:90%"></div></div></div>
-    <div class="skill"><p>Optics</p><div class="bar"><div class="fill optics" style="width:85%"></div></div></div>
-    <div class="skill"><p>Scientific Writing</p><div class="bar"><div class="fill writing" style="width:80%"></div></div></div>
-    <div class="skill"><p>Algebra</p><div class="bar"><div class="fill algebra" style="width:93%"></div></div></div>
+    <div class="skill">
+      <p>Mathematics</p>
+      <div class="bar"><div class="fill math" data-width="95%"></div></div>
+    </div>
+    <div class="skill">
+      <p>Physics (Classical Mechanics)</p>
+      <div class="bar"><div class="fill physics" data-width="92%"></div></div>
+    </div>
+    <div class="skill">
+      <p>Calculus</p>
+      <div class="bar"><div class="fill calculus" data-width="90%"></div></div>
+    </div>
+    <div class="skill">
+      <p>Optics</p>
+      <div class="bar"><div class="fill optics" data-width="85%"></div></div>
+    </div>
+    <div class="skill">
+      <p>Scientific Writing</p>
+      <div class="bar"><div class="fill writing" data-width="80%"></div></div>
+    </div>
+    <div class="skill">
+      <p>Algebra</p>
+      <div class="bar"><div class="fill algebra" data-width="93%"></div></div>
+    </div>
   </div>
 </section>
 
@@ -357,12 +793,179 @@ footer {
 </footer>
 
 <script>
+// 创建粒子背景
+function createParticles() {
+  const particlesContainer = document.getElementById('particles');
+  for (let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 15 + 's';
+    particle.style.width = Math.random() * 5 + 2 + 'px';
+    particle.style.height = particle.style.width;
+    particlesContainer.appendChild(particle);
+  }
+}
+
+// 滚动动画
+function handleScrollAnimations() {
+  const sections = document.querySelectorAll('section');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        
+        // 触发技能条动画
+        if (entry.target.id === 'skills') {
+          animateSkillBars();
+        }
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  sections.forEach(section => {
+    observer.observe(section);
+  });
+}
+
+// 技能条动画
+function animateSkillBars() {
+  const skillBars = document.querySelectorAll('.fill');
+  skillBars.forEach(bar => {
+    const width = bar.getAttribute('data-width');
+    setTimeout(() => {
+      bar.style.width = width;
+    }, 300);
+  });
+}
+
+// 自定义光标效果
+function initCursorEffect() {
+  const cursor = document.getElementById('cursor');
+  const trails = [];
+  
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    
+    // 创建轨迹
+    const trail = document.createElement('div');
+    trail.className = 'cursor-trail';
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+    document.body.appendChild(trail);
+    
+    trails.push(trail);
+    
+    // 移除旧的轨迹
+    if (trails.length > 10) {
+      const oldTrail = trails.shift();
+      oldTrail.remove();
+    }
+    
+    // 轨迹淡出
+    setTimeout(() => {
+      trail.style.opacity = '0';
+      trail.style.transform = 'scale(0.5)';
+      setTimeout(() => {
+        if (trail.parentNode) {
+          trail.remove();
+        }
+      }, 300);
+    }, 100);
+  });
+  
+  // 点击效果
+  document.addEventListener('click', (e) => {
+    cursor.style.transform = 'scale(2)';
+    setTimeout(() => {
+      cursor.style.transform = 'scale(1)';
+    }, 200);
+  });
+}
+
+// 图片点击效果
+document.getElementById('profile-img').addEventListener('click', function() {
+  this.style.transform = 'rotate(360deg) scale(1.2)';
+  setTimeout(() => {
+    this.style.transform = 'rotate(0deg) scale(1)';
+  }, 1000);
+});
+
+// 初始化所有功能
+document.addEventListener('DOMContentLoaded', function() {
+  createParticles();
+  handleScrollAnimations();
+  initCursorEffect();
+  
+  // 初始显示第一个section
+  document.querySelector('#about').classList.add('visible');
+});
+
+// 原有的点击切换active类
 document.querySelectorAll(".exp-item, .achievement").forEach(card => {
   card.addEventListener("click", () => {
-    document.querySelectorAll(".active").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".active").forEach(el => {
+      el.classList.remove("active");
+    });
     card.classList.add("active");
+    
+    // 添加点击动画
+    card.style.animation = 'none';
+    setTimeout(() => {
+      card.style.animation = 'pulse 0.5s ease';
+    }, 10);
   });
 });
+
+// 按钮点击波纹效果
+document.querySelector('.btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  // 创建波纹
+  const ripple = document.createElement('span');
+  const rect = this.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const x = e.clientX - rect.left - size / 2;
+  const y = e.clientY - rect.top - size / 2;
+  
+  ripple.style.cssText = `
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    width: ${size}px;
+    height: ${size}px;
+    top: ${y}px;
+    left: ${x}px;
+    pointer-events: none;
+  `;
+  
+  this.appendChild(ripple);
+  
+  setTimeout(() => {
+    ripple.remove();
+  }, 600);
+  
+  // 滚动到联系部分
+  document.querySelector('#contact').scrollIntoView({
+    behavior: 'smooth'
+  });
+});
+
+// 添加波纹动画
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes ripple-animation {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
 </script>
 
 </body>
